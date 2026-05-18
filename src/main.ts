@@ -59,9 +59,16 @@ const state = EditorState.create({
           if (doc.trim().length === 0) {
             root.style.borderTop = '3px solid #f44336'
           } else {
-            JSON.parse(doc)
-            root.style.borderTop = ''
-            showStatus('✓ Valid JSON')
+            const keys = doc.match(/"([^"]+)"\s*:/g) || []
+            const keyNames = keys.map((k) => k.replace(/"/g, '').replace(/\s*:/, ''))
+            const hasDuplicate = new Set(keyNames).size !== keyNames.length
+            if (hasDuplicate) {
+              root.style.borderTop = '3px solid #f44336'
+            } else {
+              JSON.parse(doc)
+              root.style.borderTop = ''
+              showStatus('✓ Valid JSON')
+            }
           }
         } catch {
           root.style.borderTop = '3px solid #ff9800'

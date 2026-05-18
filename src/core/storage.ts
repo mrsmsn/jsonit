@@ -6,7 +6,14 @@ import { deflate, inflate } from '../utils/compress'
  * @param state - 保存するエディタの状態
  * @returns URL フラグメント（例: `#abc123...`）
  */
-export function encodeToFragment(state: SharedState): string {
+export function encodeToFragment(state: SharedState): string | null {
+  // 重複キーのチェック
+  const keys = state.content.match(/"([^"]+)"\s*:/g) || []
+  const keyNames = keys.map((k) => k.replace(/"/g, '').replace(/\s*:/, ''))
+  if (new Set(keyNames).size !== keyNames.length) {
+    return null
+  }
+
   const json = JSON.stringify(state)
   const compressed = deflate(json)
   // ブラウザ環境で Base64 エンコード

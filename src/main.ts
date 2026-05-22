@@ -7,7 +7,25 @@ import type { SharedState } from './types'
 
 // URIフラグメントから復元
 const sharedState = decodeFromFragment(window.location.hash)
-const initialContent = sharedState?.content || '{}'
+const initialContent = sharedState?.content || `{
+  "hello": "world",
+  "users": [
+    {
+      "id": 1,
+      "name": "Alice",
+      "email": "alice@example.com"
+    },
+    {
+      "id": 2,
+      "name": "Bob",
+      "email": "bob@example.com"
+    }
+  ],
+  "settings": {
+    "theme": "dark",
+    "language": "ja"
+  }
+}`
 
 const root = document.getElementById('root')!
 

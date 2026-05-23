@@ -5,9 +5,10 @@ import { basicSetup } from 'codemirror'
 import { decodeFromFragment, encodeToFragment } from './core/storage'
 import type { SharedState } from './types'
 
-// URIフラグメントから復元
-const sharedState = decodeFromFragment(window.location.hash)
-const initialContent = sharedState?.content || `{
+// Default JSON shown when no shared state is present
+// Contains multiple types (string, number, array, nested object) so users can immediately see the editor in action.
+// TODO: localize dynamically based on user language preference
+const defaultJson = `{
   "hello": "world",
   "users": [
     {
@@ -26,6 +27,10 @@ const initialContent = sharedState?.content || `{
     "language": "ja"
   }
 }`
+
+// URIフラグメントから復元
+const sharedState = decodeFromFragment(window.location.hash)
+const initialContent = sharedState?.content || defaultJson
 
 const root = document.getElementById('root')!
 

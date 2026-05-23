@@ -60,7 +60,11 @@ shareBtn.onclick = () => {
     options: {},
   }
   const fragment = encodeToFragment(newState)
-  const shareUrl = window.location.origin + window.location.pathname + '#' + fragment.slice(1)
+  if (!fragment) {
+    showStatus('Share failed — duplicate keys found.')
+    return
+  }
+  const shareUrl = window.location.origin + window.location.pathname + fragment.slice(1)
 
   navigator.clipboard.writeText(shareUrl)
     .then(() => showStatus('Copied to clipboard!'))
